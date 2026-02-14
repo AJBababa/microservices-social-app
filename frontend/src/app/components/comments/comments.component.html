@@ -1,0 +1,32 @@
+<div class="comments-section-inner">
+
+  <div class="comments-list">
+    <div *ngFor="let comment of commentsList" class="comment-item">
+      <div class="avatar-placeholder-sm">{{ comment.username.substring(0,2).toUpperCase() }}</div>
+      <div class="comment-body">
+        <div class="comment-header">
+          <span class="comment-username">{{comment.username}}</span>
+          <span class="comment-time">just now</span> <!-- Placeholder for time -->
+        </div>
+        <p class="comment-text">{{comment.content}}</p>
+      </div>
+
+      <button *ngIf="auth.isLoggedIn() && auth.getUsername() === comment.username" (click)="deleteComment(comment.id)"
+        class="btn btn-icon btn-ghost btn-delete-comment" title="Delete Comment">
+        <lucide-icon name="trash-2" class="icon-sm"></lucide-icon>
+      </button>
+    </div>
+
+    <div *ngIf="commentsList.length === 0" class="no-comments">
+      No comments yet. Be the first!
+    </div>
+  </div>
+
+  <form (ngSubmit)="addComment()" class="comment-form">
+    <input id="content" [(ngModel)]="newCommentContent" name="content" required type="text" class="input comment-input"
+      placeholder="Write a comment..." autocomplete="off">
+    <button type="submit" [disabled]="!newCommentContent.trim()" class="btn btn-primary btn-sm btn-post">
+      Post
+    </button>
+  </form>
+</div>

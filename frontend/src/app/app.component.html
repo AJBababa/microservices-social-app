@@ -1,0 +1,36 @@
+<nav class="navbar">
+    <div class="container navbar-content">
+        <a routerLink="/" class="logo">
+            <span class="logo-icon">IG</span> SantaMonica
+        </a>
+        <div class="nav-links">
+            <a routerLink="/" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <lucide-icon name="home" class="icon"></lucide-icon>
+                <span class="link-text">Home</span>
+            </a>
+
+            <ng-container *ngIf="auth.isLoggedIn()">
+                <a routerLink="/create-post" class="nav-link" routerLinkActive="active">
+                    <lucide-icon name="plus-circle" class="icon"></lucide-icon>
+                    <span class="link-text">Create</span>
+                </a>
+                <a routerLink="/profile" class="nav-link" routerLinkActive="active">
+                    <lucide-icon name="user" class="icon"></lucide-icon>
+                    <span class="link-text">Profile</span>
+                </a>
+                <button (click)="logout()" class="nav-link btn-logout">
+                    <lucide-icon name="log-out" class="icon"></lucide-icon>
+                    <span class="link-text">Logout</span>
+                </button>
+            </ng-container>
+
+            <a *ngIf="!auth.isLoggedIn()" routerLink="/login" class="btn btn-primary btn-sm">
+                Login
+            </a>
+        </div>
+    </div>
+</nav>
+
+<div class="container main-content">
+    <router-outlet></router-outlet>
+</div>

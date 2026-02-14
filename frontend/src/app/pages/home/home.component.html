@@ -1,0 +1,37 @@
+<main class="container feed-container">
+  <div *ngFor="let post of posts" class="card post-card">
+    <div class="post-header">
+      <div class="user-info">
+        <div class="avatar-placeholder">{{ post.username.substring(0,2).toUpperCase() }}</div>
+        <span class="username">{{ post.username }}</span>
+      </div>
+      <button *ngIf="auth.isLoggedIn()" (click)="deletePost(post.id)" class="btn btn-icon btn-ghost btn-delete"
+        title="Delete Post">
+        <lucide-icon name="trash-2" class="icon"></lucide-icon>
+      </button>
+    </div>
+
+    <div class="post-image-container">
+      <img [src]="post.image_url" [alt]="post.username">
+    </div>
+
+    <div class="post-content">
+      <p class="caption"><span class="username">{{post.username}}</span> {{ post.content }}</p>
+    </div>
+
+    <div class="post-actions">
+      <app-likes-number [postId]="post.id"></app-likes-number>
+
+      <button *ngIf="auth.isLoggedIn()" (click)="toggleComments(post.id)" class="btn btn-ghost btn-comment">
+        <lucide-icon name="message-circle" class="icon"></lucide-icon>
+        <span>{{ commentsVisible[post.id] ? 'Hide' : 'Comments' }}</span>
+      </button>
+    </div>
+
+    <div *ngIf="auth.isLoggedIn() && commentsVisible[post.id]" class="comments-section">
+      <app-comments [postId]="post.id"></app-comments>
+    </div>
+  </div>
+</main>
+
+<router-outlet />

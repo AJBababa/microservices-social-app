@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "@angular/animations": "^21.1.3",
+    "@angular/cdk": "^21.1.3",
+    "@angular/material": "^21.1.3"
+  },
+  "devDependencies": {
+    "baseline-browser-mapping": "^2.9.19"
+  }
+}
