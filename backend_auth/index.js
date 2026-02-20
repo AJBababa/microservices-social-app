@@ -42,7 +42,8 @@ app.get('/verify', (req, res) => {
   }
   jwt.verify(token, JWT_SECRET, (err, decoded) => {
     if (err) {
-      return res.status(403);
+      console.log('JWT verification failed:', err.message);
+      return res.sendStatus(403);
     }
     res.setHeader('x-user-id', String(decoded.id));
     res.setHeader('x-user-role', decoded.role);

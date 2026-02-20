@@ -7,7 +7,7 @@ require('dotenv').config();
 const app = express();
 const port = 3000;
 +
-app.set('view engine', 'ejs');
+  app.set('view engine', 'ejs');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // eslint-disable-next-line no-undef
@@ -18,15 +18,15 @@ app.use(cors());
 
 
 const pool = new Pool({
-    // eslint-disable-next-line no-undef
+  // eslint-disable-next-line no-undef
   host: process.env.DB_HOST || 'dreamy_buck',
-    // eslint-disable-next-line no-undef
+  // eslint-disable-next-line no-undef
   port: process.env.DB_PORT || 5432,
   // eslint-disable-next-line no-undef
   database: process.env.DB_NAME || 'monolito',
-    // eslint-disable-next-line no-undef
+  // eslint-disable-next-line no-undef
   user: process.env.DB_USER || 'postgres',
-    // eslint-disable-next-line no-undef
+  // eslint-disable-next-line no-undef
   password: process.env.DB_PASSWORD || 'Rumbo2005',
 });
 
@@ -51,7 +51,7 @@ app.get('/:postId', async (req, res) => {
 
 // Add Like
 app.post('/', async (req, res) => {
-//el creador del like sera el del token;
+  //el creador del like sera el del token;
   const { postId } = req.body
   const userId = req.headers['x-user-id'];
   pool.query(
@@ -72,7 +72,7 @@ app.post('/toggle', async (req, res) => {
   const { postId } = req.body;
   const userId = req.headers['x-user-id'];
   console.log('Toggle like for userId:', userId, 'and postId:', postId);
-  
+
   try {
     const existingLike = await pool.query(
       `SELECT * FROM likes WHERE user_id = $1 AND post_id = $2`,
@@ -102,6 +102,10 @@ app.post('/toggle', async (req, res) => {
 app.get('/doilike/:postId', async (req, res) => {
   const { postId } = req.params;
   const userId = req.headers['x-user-id'];
+  if (!userId || userId === 'undefined') {
+    console.error('UserId is missing or undefined in request headers');
+    return res.status(401).json({ error: 'Usuario no autenticado' });
+  }
   try {
     const existingLike = await pool.query(
       `SELECT * FROM likes WHERE user_id = $1 AND post_id = $2`,
@@ -119,8 +123,8 @@ app.get('/doilike/:postId', async (req, res) => {
 
 // Remove Like
 app.delete('/:id', async (req, res) => {
-//leeremos el id del post del req.body
-//hay que verificar el token para saber quien lo crea
+  //leeremos el id del post del req.body
+  //hay que verificar el token para saber quien lo crea
   const { postId } = req.params
   const userId = req.headers['x-user-id'];
   pool.query(
@@ -135,13 +139,13 @@ app.delete('/:id', async (req, res) => {
         `DELETE FROM likes WHERE post_id = $1 AND user_id = $2`,
         [postId, userId]
       )
-    .then(() => {
-      res.json({ message: 'Like eliminado correctamente' });
-    })
-    .catch((err) => {
-      console.error('Error eliminando like:', err);
-      res.status(500).json({ error: 'Error al eliminar like' });
-    });
+        .then(() => {
+          res.json({ message: 'Like eliminado correctamente' });
+        })
+        .catch((err) => {
+          console.error('Error eliminando like:', err);
+          res.status(500).json({ error: 'Error al eliminar like' });
+        });
     })
     .catch((err) => {
       console.error('Error verificando like:', err);
